@@ -12,7 +12,7 @@ def Feature_engineering(df):
       'target_i1','international_i1', 'Level_i1', 'failure_i1', 'Classment_class_i1',
        'MoyenneClasse_i1', 'NoteCC_11_i1',
        'NoteCC_12_i1', 'NoteCC_18_i1', 'NoteCC_19_i1', 'NoteCC_20_i1',
-       'NoteCC_23_i1', 'NoteCC_24_i1', 'NoteCC_26_i1', 'target', 'id_genre',
+       'NoteCC_23_i1', 'NoteCC_24_i1', 'NoteCC_26_i1', 'id_genre',
        'datenaiseleve', 'Level',"DO_ETAB_i1"]]
     df['age'] = ( df['id_annee'] +2007)-df['datenaiseleve'] 
     df = df.drop(['datenaiseleve'], axis=1)

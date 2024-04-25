@@ -17,12 +17,13 @@ Including another URLconf
 # backend_dews/urls.py
 from django.urls import path
 from .views.student_list_view import student_list_view
-from .views.showPredictionsBaseline1 import predictions_view
+from .views.showPredictionsBaseline1 import predictions_view, single_student_prediction_view
 
 
 urlpatterns = [
     path('students/', student_list_view, name='student_list'),
     path('predictions/', predictions_view, name='predictions'),
+    path('predictions/<str:student_id>/', single_student_prediction_view, name='single_student_prediction'),
 
     # Add more URL patterns as needed
 ]
