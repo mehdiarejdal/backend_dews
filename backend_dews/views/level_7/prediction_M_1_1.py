@@ -35,15 +35,10 @@ def make_predictions(request, model_path, index_name):
                       'probability': round(probability, 2)} 
                      for prediction, probability, hit in zip(predictions, predicted_probabilities, es_data)]
 
-    # Construct HTML response
-    html_response = "<h1>Predictions</h1>"
-    html_response += "<table border='1'><tr><th>Student ID</th><th>Prediction</th><th>Probability</th></tr>"
-    for data in response_data:
-        html_response += f"<tr><td>{data['student_id']}</td><td>{data['prediction']}</td><td>{data['probability']}</td></tr>"
-    html_response += "</table>"
+
 
     # Return HTML response
-    return HttpResponse(html_response)
+    return HttpResponse(response_data)
 
 @csrf_exempt
 def single_student_prediction(request, model_path, index_name, student_id):
@@ -68,12 +63,9 @@ def single_student_prediction(request, model_path, index_name, student_id):
     # Convert prediction to response format
     prediction_result = "Success" if prediction[0] == 0 else "Not Success"
 
-    # Construct HTML response
-    html_response = f"<h1>Prediction for Student {student_id}</h1>"
-    html_response += f"<p>Prediction: {prediction_result}</p>"
-
+ 
     # Return HTML response
-    return HttpResponse(html_response)
+    return HttpResponse(prediction_result)
 
 # Define views for different models and endpoints
 predictions_M_1_1Baseline = lambda request: make_predictions(request, "./Models/level_7/M_1_1/Baseline", "data_middle_1")
