@@ -16,6 +16,20 @@ Including another URLconf
 """
 # backend_dews/urls.py
 from django.urls import path
+
+from .views.AbsenceEtab import AbsenceEtab
+
+from .views.MoyGenEtab import MoyGenEtab
+
+from .views.TauxReussiteByClass import TauxReussiteByClass
+from .views.TauxReussiteByEtab import TauxReussiteByEtab
+from .views.SuccessRateAllStudents import SuccessRateAllStudents
+
+from .views.StudentsDistrubByLevel import StudentDistributionByLevel
+
+from .views.AbsenceClass import AbsenceClass
+
+from .views.MoyGenclass import MoyGenClassView
 from .views.level_7.student_list_view import student_list_view1
 from .views.level_7.students_list import student_list1
 from .views.level_7.prediction_M_1_2 import (
@@ -65,6 +79,15 @@ urlpatterns = [
     # level 7 
     path('students1/', student_list_view1, name='student_list'),
     path('studentslist1/', student_list1, name='student_list'),
+    path('MoyGenClassView/', MoyGenClassView.as_view(), name='MoyGenClassView'),
+    path('MoyGenEtab/', MoyGenEtab.as_view(), name='MoyGenEtab'),
+    path('AbsenceClass/', AbsenceClass.as_view(), name='AbsenceClass'),
+    path('AbsenceEtab/', AbsenceEtab.as_view(), name='AbsenceEtab'),
+    path('SuccessRateAllStudents/', SuccessRateAllStudents.as_view(), name='SuccessRateAllStudents'),
+    path('StudentDistributionByLevel/', StudentDistributionByLevel.as_view(), name='StudentDistributionByLevel'),
+    path('TauxReussiteByClass/', TauxReussiteByClass.as_view(), name='TauxReussiteByClass'),
+    path('TauxReussiteByEtab/', TauxReussiteByEtab.as_view(), name='TauxReussiteByEtab'),
+
     # predictions after 1 year
     path('predictions/M_1_1Baseline1/', predictions_M_1_1Baseline, name='predictions_M_1_2Baseline'),
     path('predictions/M_1_1Baseline1/<str:student_id>/', single_student_prediction_M_1_1Baseline, name='single_student_prediction_M_1_2Baseline'),
