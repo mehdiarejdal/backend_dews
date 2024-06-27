@@ -7,7 +7,7 @@ def student_list_view1(request):
         "query": {
             "match_all": {}
         },
-        "size": 10000
+        "size": 1000
     }
     es_results = search_documents('data_middle_1', es_query)  # Update index name accordingly
     student_data = [hit['_source'] for hit in es_results]

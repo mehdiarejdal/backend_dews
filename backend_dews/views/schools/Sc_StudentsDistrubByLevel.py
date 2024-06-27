@@ -7,17 +7,17 @@ from elasticsearch import Elasticsearch
 ELASTIC_PASSWORD = "ZkgiSTdIgawzh8--ogdY"
 es_client = Elasticsearch("http://localhost:9200", http_auth=("elastic", ELASTIC_PASSWORD))
 
-class SuccessRateAllStudents(APIView):
+class Sc_StudentsDistrubByLevel(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-        cd_etab = request.GET.get('cd_etab', None)
+        cd_etab = request.GET.get('cd_etab', '02063S')
         try:
             body = {
                 "size": 0,
                 "aggs": {
                     "levels": {
-                        "terms": {"field": "target_i1"}
+                        "terms": {"field": "Level"}  # Assurez-vous que le champ Level est de type keyword
                     }
                 }
             }
@@ -26,7 +26,7 @@ class SuccessRateAllStudents(APIView):
                 body["query"] = {
                     "bool": {
                         "filter": [
-                            {"term": {"cd_etab.keyword": cd_etab}}
+                            {"term": {"cd_etab.keyword": cd_etab}}  # Utilisez .keyword pour les champs de type texte
                         ]
                     }
                 }
@@ -35,7 +35,7 @@ class SuccessRateAllStudents(APIView):
 
             response = es_client.search(index="data_middle_*", body=body)
             results = response['aggregations']['levels']['buckets']
-            table_data = [{"rate": result['key'], "count": result['doc_count']} for result in results]
+            table_data = [{"level": result['key'], "count": result['doc_count']} for result in results]
             return JsonResponse(table_data, safe=False)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)

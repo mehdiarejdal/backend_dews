@@ -1,6 +1,6 @@
 # backend_dews/views.py
 
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import mlflow.sklearn
 import pandas as pd
@@ -15,7 +15,7 @@ def make_predictions(request, model_path, index_name):
     # Retrieve data from Elasticsearch index
     es_client = get_es_client()
     es_query = {"query": {"match_all": {}}}
-    es_response = es_client.search(index=index_name, body=es_query)
+    es_response = es_client.search(index=index_name, body=es_query, size=10000)  # Fetch up to 10000 documents
 
     # Process Elasticsearch data
     es_data = es_response['hits']['hits']
@@ -35,10 +35,8 @@ def make_predictions(request, model_path, index_name):
                       'probability': round(probability, 2)} 
                      for prediction, probability, hit in zip(predictions, predicted_probabilities, es_data)]
 
-
-
-    # Return HTML response
-    return HttpResponse(response_data)
+    # Return JSON response
+    return JsonResponse(response_data, safe=False)
 
 @csrf_exempt
 def single_student_prediction(request, model_path, index_name, student_id):
@@ -47,7 +45,7 @@ def single_student_prediction(request, model_path, index_name, student_id):
 
     # Retrieve data from Elasticsearch index for the specified student
     es_client = get_es_client()
-    es_query = {"query": {"match": {"id_eleve": student_id}}}
+    es_query = {"query": {"term": {"id_eleve": student_id}}}
     es_response = es_client.search(index=index_name, body=es_query)
 
     # Process Elasticsearch data
@@ -59,13 +57,19 @@ def single_student_prediction(request, model_path, index_name, student_id):
 
     # Make prediction
     prediction = loaded_model.predict(df)
+    probabilities = loaded_model.predict_proba(df)
+    predicted_probability = probabilities[0, 1]
 
     # Convert prediction to response format
-    prediction_result = "Success" if prediction[0] == 0 else "Not Success"
+    prediction_result = "Success" if prediction[0] == 1 else "Not Success"
+    response_data = {
+        'student_id': student_id,
+        'prediction': prediction_result,
+        'probability': round(predicted_probability, 2)
+    }
 
- 
-    # Return HTML response
-    return HttpResponse(prediction_result)
+    # Return JSON response
+    return JsonResponse(response_data, safe=False)
 
 # Define views for different models and endpoints
 predictions_M_1_1Baseline = lambda request: make_predictions(request, "./Models/level_7/M_1_1/Baseline", "data_middle_1")

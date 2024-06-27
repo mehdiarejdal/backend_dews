@@ -17,17 +17,43 @@ Including another URLconf
 # backend_dews/urls.py
 from django.urls import path
 
+from .views.schools.Sc_Internat import Sc_Internat
+
+from .views.schools.Sc_MoyGenLevel import Sc_MoyGenLevel
+
+from .views.schools.Sc_TargetIstayssirData import Sc_TargetIstayssirData
+
+from .views.schools.Sc_SuccessRateAllStudents import Sc_SuccessRateAllStudents
+
+from .views.schools.Sc_StudentsDistrubByLevel import Sc_StudentsDistrubByLevel
+
+from .views.schools.Sc_SuccessRateIdAnnee import Sc_SuccessRateIdAnnee
+
+from .views.schools.Sc_GenderIdAnnee import Sc_GenderIdAnnee
+
+from .views.aiassistant import chat
+
+from .views.SchoolData import SchoolData
+
+from .views.GenderIdAnnee import GenderIdAnnee
+
+from .views.TargetIstayssirData import TargetIstayssirData
+
+from .views.SuccessRateIdAnnee import SuccessRateIdAnnee
+
+from .views.CountAllStudents import CountAllStudents
+
 from .views.AbsenceEtab import AbsenceEtab
 
 from .views.MoyGenEtab import MoyGenEtab
 
-from .views.TauxReussiteByClass import TauxReussiteByClass
+from .views.schools.Sc_TauxReussiteByLevel import Sc_TauxReussiteByLevel
 from .views.TauxReussiteByEtab import TauxReussiteByEtab
 from .views.SuccessRateAllStudents import SuccessRateAllStudents
 
 from .views.StudentsDistrubByLevel import StudentDistributionByLevel
 
-from .views.AbsenceClass import AbsenceClass
+from .views.schools.Sc_AbsenceClass import  Sc_AbsenceClass
 
 from .views.MoyGenclass import MoyGenClassView
 from .views.level_7.student_list_view import student_list_view1
@@ -81,12 +107,32 @@ urlpatterns = [
     path('studentslist1/', student_list1, name='student_list'),
     path('MoyGenClassView/', MoyGenClassView.as_view(), name='MoyGenClassView'),
     path('MoyGenEtab/', MoyGenEtab.as_view(), name='MoyGenEtab'),
-    path('AbsenceClass/', AbsenceClass.as_view(), name='AbsenceClass'),
     path('AbsenceEtab/', AbsenceEtab.as_view(), name='AbsenceEtab'),
+    path('SchoolData/', SchoolData.as_view(), name='SchoolData'),
+    path('SuccessRateIdAnnee/', SuccessRateIdAnnee.as_view(), name='SuccessRateIdAnnee'),
+    path('CountAllStudents/', CountAllStudents.as_view(), name='CountAllStudents'),
+    path('GenderIdAnnee/', GenderIdAnnee.as_view(), name='GenderIdAnnee'),
+    path('TargetIstayssirData/', TargetIstayssirData.as_view(), name='TargetIstayssirData'),
     path('SuccessRateAllStudents/', SuccessRateAllStudents.as_view(), name='SuccessRateAllStudents'),
     path('StudentDistributionByLevel/', StudentDistributionByLevel.as_view(), name='StudentDistributionByLevel'),
-    path('TauxReussiteByClass/', TauxReussiteByClass.as_view(), name='TauxReussiteByClass'),
+    # path('TauxReussiteByClass/', TauxReussiteByClass.as_view(), name='TauxReussiteByClass'),
     path('TauxReussiteByEtab/', TauxReussiteByEtab.as_view(), name='TauxReussiteByEtab'),
+    path('api/chat/', chat, name='chat'),
+
+    #school
+    path('Sc_SuccessRateAllStudents/', Sc_SuccessRateAllStudents.as_view(), name='Sc_SuccessRateAllStudents'),
+    path('Sc_StudentsDistrubByLevel/', Sc_StudentsDistrubByLevel.as_view(), name='Sc_StudentsDistrubByLevel'),
+    path('Sc_AbsenceClass/', Sc_AbsenceClass.as_view(), name='Sc_AbsenceClass'),
+    path('Sc_GenderIdAnnee/', Sc_GenderIdAnnee.as_view(), name='Sc_GenderIdAnnee'),
+    path('Sc_SuccessRateIdAnnee/', Sc_SuccessRateIdAnnee.as_view(), name='Sc_SuccessRateIdAnnee'),
+    path('Sc_TargetIstayssirData/', Sc_TargetIstayssirData.as_view(), name='Sc_TargetIstayssirData'),
+    path('Sc_MoyGenLevel/', Sc_MoyGenLevel.as_view(), name='Sc_MoyGenLevel'),
+    path('Sc_TauxReussiteByLevel/', Sc_TauxReussiteByLevel.as_view(), name='Sc_TauxReussiteByLevel'),
+    path('Sc_Internat/', Sc_Internat.as_view(), name='Sc_Internat'),
+
+
+
+
 
     # predictions after 1 year
     path('predictions/M_1_1Baseline1/', predictions_M_1_1Baseline, name='predictions_M_1_2Baseline'),

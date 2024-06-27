@@ -7,11 +7,11 @@ from elasticsearch import Elasticsearch
 ELASTIC_PASSWORD = "ZkgiSTdIgawzh8--ogdY"
 es_client = Elasticsearch("http://localhost:9200", http_auth=("elastic", ELASTIC_PASSWORD))
 
-class SuccessRateAllStudents(APIView):
+class Sc_SuccessRateAllStudents(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-        cd_etab = request.GET.get('cd_etab', None)
+        cd_etab = request.GET.get('cd_etab', '02063S')
         try:
             body = {
                 "size": 0,

@@ -9,37 +9,40 @@ from django.http import JsonResponse
 ELASTIC_PASSWORD = "ZkgiSTdIgawzh8--ogdY"  # Define ELASTIC_PASSWORD before using it
 es_client = Elasticsearch("http://localhost:9200", http_auth=("elastic", ELASTIC_PASSWORD))
 
-class AbsenceClass(APIView):
+class Sc_MoyGenLevel(APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
+        cd_etab = request.GET.get('cd_etab', '02063S')
         try:
             body = {
                 "size": 0,
                 "aggs": {
                     "classes": {
-                        "terms": {"field": "id_classe.keyword"},
+                        "terms": {"field": "Level"},
                         "aggs": {
-                            "authorized_absences": {
-                                "sum": {"field": "NbrJourAbsenceAutorise_i1"}
-                            },
-                            "unauthorized_absences": {
-                                "sum": {"field": "NbrJourAbsenceNonAutorise_i1"}
+                            "average_grade": {
+                                "avg": {"field": "MoyenneGen_i1"}
                             }
                         }
                     }
                 }
             }
-            response = es_client.search(index="data_middle_*", body=body)
-            results = response['aggregations']['classes']['buckets']
-            table_data = [
-                {
-                    "class": result['key'],
-                    "authorized_absences": result['authorized_absences']['value'],
-                    "unauthorized_absences": result['unauthorized_absences']['value']
+            filters = []
+            if cd_etab:
+                filters.append({"term": {"cd_etab.keyword": cd_etab}})
+
+            if filters:
+                body["query"] = {
+                    "bool": {
+                        "filter": filters
+                    }
                 }
-                for result in results
-            ]
+            else:
+                body["query"] = {"match_all": {}}
+            response = es_client.search(index="data_middle*", body=body)
+            results = response['aggregations']['classes']['buckets']
+            table_data = [{"class": result['key'], "average": result['average_grade']['value']} for result in results]
             return JsonResponse(table_data, safe=False)
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=500)
